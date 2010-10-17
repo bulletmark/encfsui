@@ -1,0 +1,142 @@
+#!/bin/bash
+###############################################################################
+# This bash script provides a simple gui around the encfs command line
+# utility to mount and unmount an encrypted directory. This script
+# requires encfs, zenity, and xdg-open.
+#
+# The idea is to create a shortcut link to this script on your desktop
+# (specifying no terminal session needed) adding your source encfs dir
+# and your target mount point dir as arguments to the script. Whenever
+# you want to mount your private directory, you click on the desktop
+# shoitcut. The script uses zenity to prompt you for the passphrase and
+# then mounts the encfs directory. If you click on the shortcut when it
+# is mounted, then zenity prompts you to unmount it. There are some
+# other options, see usage below.
+#
+# Return code = 0 if no error, else 1.
+#
+# Mark Blakeney, markb@berlios.de, Oct 2010.
+###############################################################################
+
+usage() {
+    echo "Usage: `basename $0` [-options] source_enc_dir target_mount_dir"
+    echo "Mount source_enc_dir to target_mount_dir."
+    echo "If target already mounted then it will be unmounted instead."
+    echo "Options:"
+    echo "-n (don't use gui, just run in command line)"
+    echo "-i <mins> specify idle timeout mins"
+    echo "-p (make public mount, can only be done by root)"
+    echo "-o (don't open target dir in gui mode)"
+    exit 1
+}
+
+# Title on all zenity gui prompts
+TITLE="Mount encfs directory"
+
+# Process command line options
+NOGUI=0
+MINS=""
+PUBLIC=""
+NOOPEN=0
+while getopts ni:po? c; do
+    case $c in
+    n) NOGUI=1;;
+    i) MINS="--idle $OPTARG";;
+    p) PUBLIC="--public";;
+    o) NOOPEN=1;;
+    ?) usage;;
+    esac
+done
+
+shift `expr $OPTIND - 1`
+
+# Check usage
+if [ $# -ne 2 ]; then
+    usage
+fi
+
+# Read source and target dirs. Make absolute path.
+src=$(readlink -f $1)
+tgt=$(readlink -f $2)
+
+# Check if this target is already mounted
+if mount | grep -q "^encfs on $tgt "; then
+
+    # Prompt to unmount
+    if [ $NOGUI -eq 0 ]; then
+	if ! zenity --title "$TITLE" --question --text \
+	    "$tgt is already mounted.\n\nDo you want to unmount it?"; then
+	    exit 0
+	fi
+    else
+	echo -e "$tgt is already mounted.\n" >&2
+	read -p "Do you want to unmount it (y/n)? "
+	if [ "$REPLY" != "y" ]; then
+	    exit 0
+	fi
+    fi
+
+    # Unmount it
+    res=$(fusermount -u $tgt 2>&1)
+
+    # Output an error if the unmount failed
+    if [ $? -ne 0 ]; then
+	if [ $NOGUI -eq 0 ]; then
+	    zenity --title "Unmount encfs directory" --error --text "$res"
+	else
+	    echo "Error: $res"
+	fi
+
+	exit 1
+    fi
+
+    # Remove target dir if it is empty
+    rmdir $tgt 2>/dev/null
+    exit 0
+fi
+
+# Create target dir if it doesn't exist
+mkdir -p $tgt 2>/dev/null
+
+# Mount the directory
+if [ $NOGUI -eq 0 ]; then
+
+    # Check first that this is an encfs filesystem
+    if ! encfsctl $src 1>/dev/null 2>&1; then
+	zenity --title "$TITLE" --error --text \
+	"$src is not an encfs filesystem.\n\nCreate it manually with encfs."
+	rmdir $tgt 2>/dev/null
+	exit 1
+    fi
+
+    # Get passphrase from user
+    res=$(zenity --title "$TITLE" --entry \
+	--text "Mount $src to $tgt\n\nWhat is the passphrase?" --hide-text)
+
+    # User may cancel. Note that encfs has a bug such that it does not
+    # intercept this case if you use the --extpass option. That's why we
+    # are calling zenity and encfs explicity ourselves.
+    if [ $? -ne 0 ]; then
+	rmdir $tgt 2>/dev/null
+	exit 0
+    fi
+
+    # Give passphrase to encfs and mount the file system
+    res=$(echo "$res" | encfs -S $PUBLIC $MINS $src $tgt 2>&1)
+
+    # Check for error (typically a bad passphrase)
+    if [ $? -ne 0 ]; then
+	zenity --title "$TITLE" --error --text "$res"
+	rmdir $tgt 2>/dev/null
+	exit 1
+    elif [ $NOOPEN -eq 0 ]; then
+	xdg-open $tgt 2>/dev/null
+    fi
+else
+    if ! encfs $PUBLIC $MINS $src $tgt; then
+	rmdir $tgt 2>/dev/null
+	exit 1
+    fi
+fi
+
+exit 0
