@@ -36,7 +36,7 @@ install [encfs](http://www.arg0.net/encfs) and
 
 ### INSTALLATION
 
-Unpack the archive, or pull a copy the sources, and then type:
+Unpack this archive, or pull a copy the sources, and then type:
 
     sudo make install
 
