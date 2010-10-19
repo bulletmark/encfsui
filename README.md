@@ -23,8 +23,7 @@ motivation for creating this script is to give quick single click access
 from my desktop to that encrypted directory. I do not want my passphrase
 cached anywhere, and I want an easy single click way to close off access.
 
-Home: <http://github.com/bulletmark/encfsui>
-<br>
+Home: <http://github.com/bulletmark/encfsui>  
 Author: Mark Blakeney, <markb@berlios.de>
 
 ### PREREQUISITES
