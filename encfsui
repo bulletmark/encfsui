@@ -27,6 +27,7 @@
 # details.
 #
 # Mark Blakeney, markb@berlios.de, Oct 2010.
+# http://github.com/bulletmark/encfsui>
 ###############################################################################
 
 usage() {

@@ -20,10 +20,12 @@ are some other options, see usage below.
 
 I only use a single encrypted directory under my home directory. My
 motivation for creating this script is to give quick single click access
-from my desktop to that encrypted directory. I don't want my passphrase
+from my desktop to that encrypted directory. I do not want my passphrase
 cached anywhere, and I want an easy single click way to close off access.
 
-Author: Mark Blakeney, markb@berlios.de.
+Home: <http://github.com/bulletmark/encfsui>
+<br>
+Author: Mark Blakeney, <markb@berlios.de>
 
 ### PREREQUISITES
 
