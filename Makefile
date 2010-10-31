@@ -15,15 +15,17 @@
 DEST=/usr/local
 
 PROG = encfsui
+DESK = $(PROG).desktop
 
 all:
 	@echo "Type make install or make home"
 
 install:
-	install -D $(PROG) $(DEST)/bin/$(PROG)
+	install -D $(PROG) $(DEST)/bin/
 
 uninstall:
 	rm -f $(DEST)/bin/$(PROG)
 
 home:
-	install -D $(PROG) $(HOME)/bin/$(PROG)
+	install -D $(PROG) $(HOME)/bin/
+	install -D $(DESK) $(HOME)/Desktop/

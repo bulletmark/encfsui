@@ -23,6 +23,8 @@ motivation for creating this script is to give quick single click access
 from my desktop to that encrypted directory. I do not want my passphrase
 cached anywhere, and I want an easy single click way to close off access.
 
+A sample desktop file (`encfsui.desktop`) is included.
+
 Home: <http://github.com/bulletmark/encfsui>  
 Author: Mark Blakeney, <markb@berlios.de>
 
@@ -44,6 +46,8 @@ Unpack this archive, or pull a copy the sources, and then type:
 which copies encfsui to `/usr/local/bin`. Alternately, just copy
 `encfsui` anywhere in your path, e.g. to `~/bin`.
 
+Copy the sample `encfsui.desktop` file to your `~/Desktop`.
+
 ### USAGE
 
     encfsui [-options] source_enc_dir target_mount_dir
@@ -58,18 +62,17 @@ which copies encfsui to `/usr/local/bin`. Alternately, just copy
     -p (make public mount, can only be done by root)
     -o (don't open target dir in gui mode)
 
-Just create a shortcut for this command on your GUI desktop (e.g.
-encfsui.desktop), specifying your private source (encfs) and target
-(mountpoint) directories. I assign the gnome icon
+Just create a shortcut for this command on your GUI desktop (e.g. see
+sample `encfsui.desktop`), specifying your private source (encfs) and
+target (mountpoint) directories. I assign the gnome icon
 `/usr/share/pixmaps/seahorse/48x48/seahorse-key-personal.png` which
 gives a nice padlock + personal icon.
 
-You must create your
-[encfs](http://www.arg0.net/encfs)
-encrypted directory once before using this tool,
-or at least the gui portion. See `man encfs`, although in short just
-type the following on a command line to be prompted through creating the
-directory and encryption passphrase etc.
+You must create your [encfs](http://www.arg0.net/encfs) encrypted
+directory once before using this tool, or at least the gui portion. See
+`man encfs`, although in short just type the following on a command line
+to be prompted through creating the directory and encryption passphrase
+etc.
 
     encfsui -n source_enc_dir target_mount_dir
 

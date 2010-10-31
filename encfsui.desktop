@@ -1,0 +1,7 @@
+# Sample desktop entry for encfsui
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=encfsui
+Icon=/usr/share/pixmaps/seahorse/48x48/seahorse-key-personal.png
+Exec=encfsui -i60 .Private Private
