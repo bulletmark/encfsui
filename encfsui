@@ -110,6 +110,9 @@ fi
 # Create target dir if it doesn't exist
 mkdir -p $tgt 2>/dev/null
 
+mounted=0
+result=0
+
 # Mount the directory
 if [ $NOGUI -eq 0 ]; then
 
@@ -117,38 +120,51 @@ if [ $NOGUI -eq 0 ]; then
     if ! encfsctl $src 1>/dev/null 2>&1; then
 	zenity --title "$TITLE" --error --text \
 	"$src is not an encfs filesystem.\n\nCreate it manually with encfs."
-	rmdir $tgt 2>/dev/null
-	exit 1
-    fi
+	result=1
+    else
 
-    # Get passphrase from user
-    res=$(zenity --title "$TITLE" --entry \
-	--text "Mount $src to $tgt\n\nWhat is the passphrase?" --hide-text)
+	# Loop on user entry for passphrase ..
+	while true; do
 
-    # User may cancel. Note that encfs has a bug such that it does not
-    # intercept this case if you use the --extpass option. That's why we
-    # are calling zenity and encfs explicity ourselves.
-    if [ $? -ne 0 ]; then
-	rmdir $tgt 2>/dev/null
-	exit 0
-    fi
+	    # Get passphrase from user
+	    res=$(zenity --title "$TITLE" --entry \
+		--text "Mount $src to $tgt\n\nWhat is the passphrase?" \
+	       	--hide-text)
 
-    # Give passphrase to encfs and mount the file system
-    res=$(echo "$res" | encfs -S $PUBLIC $MINS $src $tgt 2>&1)
+	    # User may cancel. Note that encfs has a bug such that it
+	    # does not intercept this case if you use the --extpass
+	    # option. That's why we are calling zenity and encfs
+	    # explicity ourselves.
+	    if [ $? -ne 0 ]; then
+		break
+	    fi
 
-    # Check for error (typically a bad passphrase)
-    if [ $? -ne 0 ]; then
-	zenity --title "$TITLE" --error --text "$res"
-	rmdir $tgt 2>/dev/null
-	exit 1
-    elif [ $NOOPEN -eq 0 ]; then
-	xdg-open $tgt 2>/dev/null
+	    # Give passphrase to encfs and mount the file system
+	    res=$(echo "$res" | encfs -S $PUBLIC $MINS $src $tgt 2>&1)
+
+	    # Check for error (typically a bad passphrase)
+	    if [ $? -ne 0 ]; then
+		zenity --title "$TITLE" --error --text "$res"
+	    else
+		if [ $NOOPEN -eq 0 ]; then
+		    xdg-open $tgt 2>/dev/null
+		fi
+
+		mounted=1
+		break
+	    fi
+	done
     fi
 else
-    if ! encfs $PUBLIC $MINS $src $tgt; then
-	rmdir $tgt 2>/dev/null
-	exit 1
+    if encfs $PUBLIC $MINS $src $tgt; then
+	mounted=1
+    else
+	result=1
     fi
 fi
 
-exit 0
+if [ $mounted -eq 0 ]; then
+    rmdir $tgt 2>/dev/null
+fi
+
+exit $result
