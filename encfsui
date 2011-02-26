@@ -32,10 +32,9 @@
 
 usage() {
     echo "Usage: `basename $0` [-options] source_enc_dir target_mount_dir"
-    echo "Mount source_enc_dir to target_mount_dir."
+    echo "GUI utility to mount source_enc_dir to target_mount_dir."
     echo "If target already mounted then it will be unmounted instead."
     echo "Options:"
-    echo "-n (don't use gui, just run in command line)"
     echo "-i <mins> specify idle timeout mins"
     echo "-p (make public mount, can only be done by root)"
     echo "-o (don't open target dir in gui mode)"
@@ -46,13 +45,11 @@ usage() {
 TITLE="Mount encfs directory"
 
 # Process command line options
-NOGUI=0
 MINS=""
 PUBLIC=""
 NOOPEN=0
-while getopts ni:po? c; do
+while getopts i:po? c; do
     case $c in
-    n) NOGUI=1;;
     i) MINS="--idle $OPTARG";;
     p) PUBLIC="--public";;
     o) NOOPEN=1;;
@@ -60,7 +57,7 @@ while getopts ni:po? c; do
     esac
 done
 
-shift `expr $OPTIND - 1`
+shift $(($OPTIND - 1))
 
 # Check usage
 if [ $# -ne 2 ]; then
@@ -81,17 +78,9 @@ fi
 if mount | grep -q "^encfs on $tgt "; then
 
     # Prompt to unmount
-    if [ $NOGUI -eq 0 ]; then
-	if ! zenity --title "$TITLE" --question --text \
-	    "$tgt is already mounted.\n\nDo you want to unmount it?"; then
-	    exit 0
-	fi
-    else
-	echo -e "$tgt is already mounted.\n" >&2
-	read -p "Do you want to unmount it (y/n)? "
-	if [ "$REPLY" != "y" ]; then
-	    exit 0
-	fi
+    if ! zenity --title "$TITLE" --question --text \
+	"$tgt is already mounted.\n\nDo you want to unmount it?"; then
+	exit 0
     fi
 
     # Unmount it
@@ -99,12 +88,7 @@ if mount | grep -q "^encfs on $tgt "; then
 
     # Output an error if the unmount failed
     if [ $? -ne 0 ]; then
-	if [ $NOGUI -eq 0 ]; then
-	    zenity --title "Unmount encfs directory" --error --text "$res"
-	else
-	    echo "Error: $res"
-	fi
-
+	zenity --title "Unmount encfs directory" --error --text "$res"
 	exit 1
     fi
 
@@ -117,65 +101,54 @@ fi
 mkdir -p $tgt &>/dev/null
 
 mounted=0
-result=0
 
-# Mount the directory
-if [ $NOGUI -eq 0 ]; then
+# Mount the directory. Check first that this is an encfs filesystem
+if ! encfsctl $src &>/dev/null; then
 
-    # Check first that this is an encfs filesystem
-    if ! encfsctl $src &>/dev/null; then
-
-	# Open terminal and run encfs to prompt user through creation
-	if ! x-terminal-emulator -T "$TITLE" \
-	    -e "encfs $PUBLIC $MINS $src $tgt" &>/dev/null; then
-	    zenity --title "$TITLE" --error --text \
-	    "$src is not an encfs filesystem.\n\nCreate it manually with encfs."
-	    result=1
-	fi
-    else
-
-	# Loop on user entry for passphrase ..
-	while true; do
-
-	    # Get passphrase from user
-	    res=$(zenity --title "$TITLE" --entry \
-		--text "Mount $src to $tgt\n\nWhat is the passphrase?" \
-		--hide-text)
-
-	    # User may cancel. Note that encfs has a bug such that it
-	    # does not intercept this case if you use the --extpass
-	    # option. That's why we are calling zenity and encfs
-	    # explicity ourselves.
-	    if [ $? -ne 0 ]; then
-		break
-	    fi
-
-	    # Give passphrase to encfs and mount the file system
-	    res=$(echo "$res" | encfs -S $PUBLIC $MINS $src $tgt 2>&1)
-
-	    # Check for error (typically a bad passphrase)
-	    if [ $? -ne 0 ]; then
-		zenity --title "$TITLE" --error --text "$res"
-	    else
-		if [ $NOOPEN -eq 0 ]; then
-		    xdg-open $tgt &>/dev/null
-		fi
-
-		mounted=1
-		break
-	    fi
-	done
+    # Open terminal and run encfs to prompt user through creation
+    if ! x-terminal-emulator -T "$TITLE" \
+	-e "encfs $PUBLIC $MINS $src $tgt" &>/dev/null; then
+	zenity --title "$TITLE" --error --text \
+	"$src is not an encfs filesystem.\n\nCreate it manually with encfs."
+	exit 1
     fi
-else
-    if encfs $PUBLIC $MINS $src $tgt; then
-	mounted=1
-    else
-	result=1
-    fi
+
+    exit 0
 fi
+
+# Loop on user entry for passphrase ..
+while true; do
+
+    # Get passphrase from user
+    res=$(zenity --title "$TITLE" --entry \
+	--text "Mount $src to $tgt\n\nWhat is the passphrase?" --hide-text)
+
+    # User may cancel. Note that encfs has a bug such that it
+    # does not intercept this case if you use the --extpass
+    # option. That's why we are calling zenity and encfs
+    # explicity ourselves.
+    if [ $? -ne 0 ]; then
+	break
+    fi
+
+    # Give passphrase to encfs and mount the file system
+    res=$(echo "$res" | encfs -S $PUBLIC $MINS $src $tgt 2>&1)
+
+    # Check for error (typically a bad passphrase)
+    if [ $? -eq 0 ]; then
+	if [ $NOOPEN -eq 0 ]; then
+	    xdg-open $tgt &>/dev/null
+	fi
+
+	mounted=1
+	break
+    fi
+
+    zenity --title "$TITLE" --error --text "$res"
+done
 
 if [ $mounted -eq 0 ]; then
     rmdir $tgt &>/dev/null
 fi
 
-exit $result
+exit 0

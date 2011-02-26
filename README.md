@@ -57,7 +57,6 @@ Copy the sample `encfsui.desktop` file to your `~/Desktop`.
     If target already mounted then it will be unmounted instead.
 
     Options:
-    -n (don't use gui, just run in command line)
     -i <mins> specify idle timeout mins
     -p (make public mount, can only be done by root)
     -o (don't open target dir in gui mode)
