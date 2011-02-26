@@ -68,16 +68,8 @@ target (mountpoint) directories. I assign the gnome icon
 `/usr/share/pixmaps/seahorse/48x48/seahorse-key-personal.png` which
 gives a nice padlock + personal icon.
 
-You must create your [encfs](http://www.arg0.net/encfs) encrypted
-directory once before using this tool, or at least the gui portion. See
-`man encfs`, although in short just type the following on a command line
-to be prompted through creating the directory and encryption passphrase
-etc.
-
-    encfsui -n source_enc_dir target_mount_dir
-
-Of course you can create multiple encfs directories, each with a
-corresponding desktop shortcut if you want.
+Of course you can create multiple encfs source + target directories,
+each with a corresponding desktop shortcut if you want.
 
 ### LICENSE
 
