@@ -71,6 +71,12 @@ fi
 src=$(readlink -f $1)
 tgt=$(readlink -f $2)
 
+if ! type encfs &>/dev/null; then
+    zenity --title "$TITLE" --error --text \
+    "Sorry, encfs is not installed.\n\nInstall it via your package manager."
+    exit 1
+fi
+
 # Check if this target is already mounted
 if mount | grep -q "^encfs on $tgt "; then
 
@@ -103,12 +109,12 @@ if mount | grep -q "^encfs on $tgt "; then
     fi
 
     # Remove target dir if it is empty
-    rmdir $tgt 2>/dev/null
+    rmdir $tgt &>/dev/null
     exit 0
 fi
 
 # Create target dir if it doesn't exist
-mkdir -p $tgt 2>/dev/null
+mkdir -p $tgt &>/dev/null
 
 mounted=0
 result=0
@@ -117,11 +123,11 @@ result=0
 if [ $NOGUI -eq 0 ]; then
 
     # Check first that this is an encfs filesystem
-    if ! encfsctl $src 1>/dev/null 2>&1; then
+    if ! encfsctl $src &>/dev/null; then
 
 	# Open terminal and run encfs to prompt user through creation
 	if ! x-terminal-emulator -T "$TITLE" \
-	    -e "encfs $PUBLIC $MINS $src $tgt" 2>/dev/null; then
+	    -e "encfs $PUBLIC $MINS $src $tgt" &>/dev/null; then
 	    zenity --title "$TITLE" --error --text \
 	    "$src is not an encfs filesystem.\n\nCreate it manually with encfs."
 	    result=1
@@ -152,7 +158,7 @@ if [ $NOGUI -eq 0 ]; then
 		zenity --title "$TITLE" --error --text "$res"
 	    else
 		if [ $NOOPEN -eq 0 ]; then
-		    xdg-open $tgt 2>/dev/null
+		    xdg-open $tgt &>/dev/null
 		fi
 
 		mounted=1
@@ -169,7 +175,7 @@ else
 fi
 
 if [ $mounted -eq 0 ]; then
-    rmdir $tgt 2>/dev/null
+    rmdir $tgt &>/dev/null
 fi
 
 exit $result
