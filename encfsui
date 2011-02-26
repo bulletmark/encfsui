@@ -118,9 +118,14 @@ if [ $NOGUI -eq 0 ]; then
 
     # Check first that this is an encfs filesystem
     if ! encfsctl $src 1>/dev/null 2>&1; then
-	zenity --title "$TITLE" --error --text \
-	"$src is not an encfs filesystem.\n\nCreate it manually with encfs."
-	result=1
+
+	# Open terminal and run encfs to prompt user through creation
+	if ! x-terminal-emulator -T "$TITLE" \
+	    -e "encfs $PUBLIC $MINS $src $tgt" 2>/dev/null; then
+	    zenity --title "$TITLE" --error --text \
+	    "$src is not an encfs filesystem.\n\nCreate it manually with encfs."
+	    result=1
+	fi
     else
 
 	# Loop on user entry for passphrase ..
@@ -129,7 +134,7 @@ if [ $NOGUI -eq 0 ]; then
 	    # Get passphrase from user
 	    res=$(zenity --title "$TITLE" --entry \
 		--text "Mount $src to $tgt\n\nWhat is the passphrase?" \
-	       	--hide-text)
+		--hide-text)
 
 	    # User may cancel. Note that encfs has a bug such that it
 	    # does not intercept this case if you use the --extpass
