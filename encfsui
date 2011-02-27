@@ -59,14 +59,14 @@ done
 
 shift $(($OPTIND - 1))
 
-# Check usage
-if [ $# -ne 2 ]; then
-    usage
-fi
-
 # Read source and target dirs. Make absolute path.
 src=$(readlink -f $1)
 tgt=$(readlink -f $2)
+
+# Check usage
+if [ -z "$src" -o -z "$tgt"  ]; then
+    usage
+fi
 
 if ! type encfs &>/dev/null; then
     zenity --title "$TITLE" --error --text \
@@ -97,26 +97,29 @@ if mount | grep -q "^encfs on $tgt "; then
     exit 0
 fi
 
-# Create target dir if it doesn't exist
-mkdir -p $tgt &>/dev/null
-
-mounted=0
-
 # Mount the directory. Check first that this is an encfs filesystem
 if ! encfsctl $src &>/dev/null; then
 
     # Open terminal and run encfs to prompt user through creation
-    if ! x-terminal-emulator -T "$TITLE" \
+    if ! xterm -fa monospace -fs 10 -T "$TITLE" \
 	-e "encfs $PUBLIC $MINS $src $tgt" &>/dev/null; then
 	zenity --title "$TITLE" --error --text \
 	"$src is not an encfs filesystem.\n\nCreate it manually with encfs."
 	exit 1
     fi
 
+    if [ $NOOPEN -eq 0 ]; then
+	xdg-open $tgt &>/dev/null
+    fi
+
     exit 0
 fi
 
+# Create target dir if it doesn't exist
+mkdir -p $tgt &>/dev/null
+
 # Loop on user entry for passphrase ..
+mounted=0
 while true; do
 
     # Get passphrase from user
