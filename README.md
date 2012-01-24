@@ -46,7 +46,13 @@ Unpack this archive, or pull a copy the sources, and then type:
 which copies encfsui to `/usr/local/bin`. Alternately, just copy
 `encfsui` anywhere in your path, e.g. to `~/bin`.
 
-Copy the sample `encfsui.desktop` file to your `~/Desktop`.
+Copy the sample `encfsui.desktop` file to your `~/Desktop` etc.
+
+On a freedesktop.org compliant system such as recent Gnome or KDE,
+instead copy `encfsui.desktop` to `/usr/share/applications` (accessible
+to everybody) or to `~/.local/share/applications` (accessible to you only).
+Then, e.g. on Ubuntu Unity or Gnome Shell, you can search for encfsui in your
+applications list and drag add it to your Unity or Gnome Shell launcher.
 
 ### USAGE
 
@@ -72,7 +78,7 @@ each with a corresponding desktop shortcut if you want.
 
 ### LICENSE
 
-Copyright (C) 2010 Mark Blakeney. This program is distributed under the
+Copyright (C) 2010, 2011 Mark Blakeney. This program is distributed under the
 terms of the GNU General Public License.
 
 This program is free software: you can redistribute it and/or modify it
