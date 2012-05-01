@@ -57,7 +57,7 @@ while getopts i:po? c; do
     esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 # Read source and target dirs. Make absolute path.
 src=$(readlink -f $1)
