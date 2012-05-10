@@ -7,15 +7,13 @@ and unmount an encrypted directory. This script requires
 [zenity](http://live.gnome.org/Zenity), and
 [xdg-open](http://portland.freedesktop.org/wiki/).
 
-The idea is to create a shortcut link to this script on your desktop
-(specifying no terminal session needed) adding your source
-[encfs](http://www.arg0.net/encfs) dir and your target mount
-point dir as arguments to the script. Whenever you want to mount your
-private directory, you click on the desktop shortcut. The script uses
+Whenever you want to mount your private directory, you click on the
+desktop launcher. The launcher runs the script with appropriate
+directory arguments. The script uses
 [zenity](http://live.gnome.org/Zenity) to prompt you for the passphrase
 and then mounts the [encfs](http://www.arg0.net/encfs) directory.
-If you click on the shortcut when it is mounted, then
-[zenity](http://live.gnome.org/Zenity) prompts you to unmount it. There
+If you click on the launcher when the private directory is already mounted, then
+you are prompted to unmount it. There
 are some other options, see usage below.
 
 I only use a single encrypted directory under my home directory. My
@@ -23,7 +21,7 @@ motivation for creating this script is to give quick single click access
 from my desktop to that encrypted directory. I do not want my passphrase
 cached anywhere, and I want an easy single click way to close off access.
 
-A sample desktop file (`encfsui.desktop`) is included.
+A sample desktop launcher file (`encfsui.desktop`) is included.
 
 Home: <http://github.com/bulletmark/encfsui>  
 Author: Mark Blakeney, <markb@berlios.de>
@@ -35,7 +33,7 @@ of xdg-utils and is installed by default. E.g. for ubuntu, you can
 install [encfs](http://www.arg0.net/encfs) and
 [zenity](http://live.gnome.org/Zenity) with the following command:
 
-    sudo aptitude install encfs zenity
+    sudo apt-get install encfs zenity
 
 ### INSTALLATION
 
@@ -46,35 +44,29 @@ Unpack this archive, or pull a copy the sources, and then type:
 which copies encfsui to `/usr/local/bin`. Alternately, just copy
 `encfsui` anywhere in your path, e.g. to `~/bin`.
 
-Copy the sample `encfsui.desktop` file to your `~/Desktop` etc.
+Copy the sample `encfsui.desktop` file to your
+`~/.local/share/applications/` etc.
 
 On a freedesktop.org compliant system such as recent Gnome or KDE,
-instead copy `encfsui.desktop` to `/usr/share/applications` (accessible
+copy `encfsui.desktop` to `/usr/share/applications` (accessible
 to everybody) or to `~/.local/share/applications` (accessible to you only).
 Then, e.g. on Ubuntu Unity or Gnome Shell, you can search for encfsui in your
 applications list and drag add it to your Unity or Gnome Shell launcher.
+
+Of course you can create multiple encfs source + target directories,
+each with a corresponding desktop launcher if you want.
 
 ### USAGE
 
     encfsui [-options] source_enc_dir target_mount_dir
 
-    Mount source_enc_dir to target_mount_dir.
-
+    GUI utility to mount source_enc_dir to target_mount_dir.
     If target already mounted then it will be unmounted instead.
 
     Options:
     -i <mins> specify idle timeout mins
     -p (make public mount, can only be done by root)
     -o (don't open target dir in gui mode)
-
-Just create a shortcut for this command on your GUI desktop (e.g. see
-sample `encfsui.desktop`), specifying your private source (encfs) and
-target (mountpoint) directories. I assign the gnome icon
-`/usr/share/pixmaps/seahorse/48x48/seahorse-key-personal.png` which
-gives a nice padlock + personal icon.
-
-Of course you can create multiple encfs source + target directories,
-each with a corresponding desktop shortcut if you want.
 
 ### LICENSE
 

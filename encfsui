@@ -2,16 +2,7 @@
 ###############################################################################
 # This bash script provides a simple gui around the encfs command line
 # utility to mount and unmount an encrypted directory. This script
-# requires encfs, zenity, and xdg-open.
-#
-# The idea is to create a shortcut link to this script on your desktop
-# (specifying no terminal session needed) adding your source encfs dir
-# and your target mount point dir as arguments to the script. Whenever
-# you want to mount your private directory, you click on the desktop
-# shoitcut. The script uses zenity to prompt you for the passphrase and
-# then mounts the encfs directory. If you click on the shortcut when it
-# is mounted, then zenity prompts you to unmount it. There are some
-# other options, see usage below.
+# requires encfs, zenity, and xdg-open. See accompaning README.md.
 #
 # Return code = 0 if no error, else 1.
 #

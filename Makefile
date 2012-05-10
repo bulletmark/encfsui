@@ -12,20 +12,30 @@
 # General Public License at <http://www.gnu.org/licenses/> for more
 # details.
 
-DEST=/usr/local
+ALLDIR=/usr/local
 
-PROG = encfsui
-DESK = $(PROG).desktop
+PRG = encfsui
+APP = $(PRG).desktop
+
+ALLPRG = $(ALLDIR)/bin
+ALLAPP = $(ALLDIR)/share/applications
+
+MYOPRG = $(HOME)/bin
+MYAAPP = $(HOME)/.local/share/applications
+MYBAPP = $(HOME)/Desktop
 
 all:
 	@echo "Type make install or make home"
 
 install:
-	install -D $(PROG) $(DEST)/bin/
+	test -d $(ALLPRG) && install -D $(PRG) $(ALLPRG)
+	test -d $(ALLAPP) && install -D $(APP) $(ALLAPP)
 
 uninstall:
-	rm -f $(DEST)/bin/$(PROG)
+	rm -f $(ALLPRG)/$(PRG)
+	rm -f $(ALLAPP)/$(APP)
 
 home:
-	install -D $(PROG) $(HOME)/bin/
-	install -D $(DESK) $(HOME)/Desktop/
+	test -d $(MYOPRG) && install -D $(PRG) $(MYOPRG)
+	if test -d $(MYAAPP); then install -D $(APP) $(MYAAPP); else \
+	install -D $(APP) $(MYBAPP); fi
