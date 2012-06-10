@@ -48,7 +48,7 @@ To install for your own personal use, type:
 which copies encfsui to `$HOME/bin/` and encfsui.desktop to
 `$HOME/.local/share/applications/`.
 
-Alternately, to install in a system system area for all users type:
+Alternately, to install in a system area for all users type:
 
     sudo make install
 
@@ -60,7 +60,7 @@ applications list to start it, or drag add it to your Unity or Gnome
 Shell launcher for convenience. Of course you can create multiple encfs
 source + target directories, each with corresponding desktop
 launchers, if you want to specify their commands with different source
-and target dirs in the command line, as described next.
+and target dirs in the command line as described next.
 
 ### USAGE
 
