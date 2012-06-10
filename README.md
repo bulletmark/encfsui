@@ -11,15 +11,15 @@ Whenever you want to mount your private directory, you click on the
 desktop launcher. The launcher runs the script with appropriate
 directory arguments. The script uses
 [zenity](http://live.gnome.org/Zenity) to prompt you for the passphrase
-and then mounts the [encfs](http://www.arg0.net/encfs) directory.
-If you click on the launcher when the private directory is already mounted, then
-you are prompted to unmount it. There
-are some other options, see usage below.
+and then mounts the [encfs](http://www.arg0.net/encfs) directory. If you
+click on the launcher when the private directory is already mounted,
+then you are prompted to unmount it. There are some other options, see
+usage below.
 
-I only use a single encrypted directory under my home directory. My
-motivation for creating this script is to give quick single click access
-from my desktop to that encrypted directory. I do not want my passphrase
-cached anywhere, and I want an easy single click way to close off access.
+My motivation for creating this script was to give simple and quick one
+click access to a single encrypted personal directory. I do not want my
+passphrase cached anywhere, and I want an single click way to close off
+access.
 
 A sample desktop launcher file (`encfsui.desktop`) is included.
 
@@ -35,26 +35,32 @@ install [encfs](http://www.arg0.net/encfs) and
 
     sudo apt-get install encfs zenity
 
+*Note zenity seems installed by default now in Ubuntu 12.04.*
+
 ### INSTALLATION
 
-Unpack this archive, or pull a copy the sources, and then type:
+Unpack this archive, or git pull a copy of the sources.
+
+To install for your own personal use, type:
+
+    make install
+
+which copies encfsui to `$HOME/bin/` and encfsui.desktop to
+`$HOME/.local/share/applications/`.
+
+Alternately, to install in a system system area for all users type:
 
     sudo make install
 
-which copies encfsui to `/usr/local/bin`. Alternately, just copy
-`encfsui` anywhere in your path, e.g. to `~/bin`.
+which copies encfsui to `/usr/bin/` and encfsui.desktop to
+`/usr/share/applications/`.
 
-Copy the sample `encfsui.desktop` file to your
-`~/.local/share/applications/` etc.
-
-On a freedesktop.org compliant system such as recent Gnome or KDE,
-copy `encfsui.desktop` to `/usr/share/applications` (accessible
-to everybody) or to `~/.local/share/applications` (accessible to you only).
-Then, e.g. on Ubuntu Unity or Gnome Shell, you can search for encfsui in your
-applications list and drag add it to your Unity or Gnome Shell launcher.
-
-Of course you can create multiple encfs source + target directories,
-each with a corresponding desktop launcher if you want.
+On Ubuntu Unity or Gnome Shell, you can search for encfsui in your
+applications list to start it, or drag add it to your Unity or Gnome
+Shell launcher for convenience. Of course you can create multiple encfs
+source + target directories, each with corresponding desktop
+launchers, if you want to specify their commands with different source
+and target dirs in the command line, as described next.
 
 ### USAGE
 
@@ -70,7 +76,7 @@ each with a corresponding desktop launcher if you want.
 
 ### LICENSE
 
-Copyright (C) 2010, 2011 Mark Blakeney. This program is distributed under the
+Copyright (C) 2012 Mark Blakeney. This program is distributed under the
 terms of the GNU General Public License.
 
 This program is free software: you can redistribute it and/or modify it
@@ -82,3 +88,5 @@ This program is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
 Public License at <http://www.gnu.org/licenses/> for more details.
+
+<!-- vim: se ai syn=markdown: -->

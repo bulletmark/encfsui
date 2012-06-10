@@ -1,4 +1,4 @@
-# Copyright (C) 2010 Mark Blakeney, markb@berlios.de. This program is
+# Copyright (C) 2012 Mark Blakeney, markb@berlios.de. This program is
 # distributed under the terms of the GNU General Public License.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -12,30 +12,23 @@
 # General Public License at <http://www.gnu.org/licenses/> for more
 # details.
 
-ALLDIR=/usr/local
+DOC = README.md
 
-PRG = encfsui
-APP = $(PRG).desktop
-
-ALLPRG = $(ALLDIR)/bin
-ALLAPP = $(ALLDIR)/share/applications
-
-MYOPRG = $(HOME)/bin
-MYAAPP = $(HOME)/.local/share/applications
-MYBAPP = $(HOME)/Desktop
+DOCOUT = $(DOC:.md=.html)
 
 all:
-	@echo "Type make install or make home"
+	@echo "Type make install or uninstall"
 
 install:
-	test -d $(ALLPRG) && install -D $(PRG) $(ALLPRG)
-	test -d $(ALLAPP) && install -D $(APP) $(ALLAPP)
+	@./install.sh
 
 uninstall:
-	rm -f $(ALLPRG)/$(PRG)
-	rm -f $(ALLAPP)/$(APP)
+	@./install.sh -r
 
-home:
-	test -d $(MYOPRG) && install -D $(PRG) $(MYOPRG)
-	if test -d $(MYAAPP); then install -D $(APP) $(MYAAPP); else \
-	install -D $(APP) $(MYBAPP); fi
+doc:	$(DOCOUT)
+
+$(DOCOUT): $(DOC)
+	markdown $< >$@
+
+clean:
+	rm -rf $(DOCOUT)

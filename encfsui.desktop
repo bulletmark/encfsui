@@ -1,5 +1,3 @@
-# Sample desktop entry for encfsui
-
 [Desktop Entry]
 Type=Application
 Terminal=false
