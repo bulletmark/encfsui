@@ -67,8 +67,9 @@ if [ $REMOVE -eq 0 -a $LIST -eq 0 ]; then
     mkdir -p $APPDIR
     install -CDv -m 644 $PROG.desktop -t $APPDIR
 else
-    clean $BINDIR/$PROG
-    rmdir --ignore-fail-on-non-empty $BINDIR
+    if clean $BINDIR/$PROG; then
+	rmdir --ignore-fail-on-non-empty $BINDIR
+    fi
     clean $APPDIR/$PROG.desktop
 fi
 

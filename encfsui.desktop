@@ -4,3 +4,4 @@ Terminal=false
 Name=encfsui
 Icon=/usr/share/seahorse/icons/hicolor/48x48/apps/seahorse-key-personal.png
 Exec=encfsui -i60 .Private Private
+Categories=Security;Settings;
