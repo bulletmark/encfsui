@@ -73,4 +73,8 @@ else
     clean $APPDIR/$PROG.desktop
 fi
 
+if [ -x /usr/bin/update-desktop-database ]; then
+    /usr/bin/update-desktop-database -q
+fi
+
 exit 0
