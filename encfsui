@@ -35,6 +35,8 @@ usage() {
 # Title on all zenity gui prompts
 TITLE="Mount encfs directory"
 
+CLS="--class EncFSUI"
+
 # Process command line options
 MINS=""
 PUBLIC=""
@@ -60,7 +62,7 @@ if [ -z "$src" -o -z "$tgt"  ]; then
 fi
 
 if ! type encfs &>/dev/null; then
-    zenity --title "$TITLE" --error --text \
+    zenity $CLS --title "$TITLE" --error --text \
     "Sorry, encfs is not installed.\n\nInstall it via your package manager."
     exit 1
 fi
@@ -69,7 +71,7 @@ fi
 if mount | grep -q "^encfs on $tgt "; then
 
     # Prompt to unmount
-    if ! zenity --title "$TITLE" --question --text \
+    if ! zenity $CLS --title "$TITLE" --question --text \
 	"$tgt is already mounted.\n\nDo you want to unmount it?"; then
 	exit 0
     fi
@@ -79,7 +81,7 @@ if mount | grep -q "^encfs on $tgt "; then
 
     # Output an error if the unmount failed
     if [ $? -ne 0 ]; then
-	zenity --title "Unmount encfs directory" --error --text "$res"
+	zenity $CLS --title "Unmount encfs directory" --error --text "$res"
 	exit 1
     fi
 
@@ -94,7 +96,7 @@ if ! encfsctl $src &>/dev/null; then
     # Open terminal and run encfs to prompt user through creation
     if ! xterm -fa monospace -fs 10 -T "$TITLE" \
 	-e "encfs $PUBLIC $MINS $src $tgt" &>/dev/null; then
-	zenity --title "$TITLE" --error --text \
+	zenity $CLS --title "$TITLE" --error --text \
 	"$src is not an encfs filesystem.\n\nCreate it manually with encfs."
 	exit 1
     fi
@@ -114,7 +116,7 @@ mounted=0
 while true; do
 
     # Get passphrase from user
-    res=$(zenity --title "$TITLE" --entry \
+    res=$(zenity $CLS --title "$TITLE" --entry \
 	--text "Mount $src to $tgt\n\nWhat is the passphrase?" --hide-text)
 
     # User may cancel. Note that encfs has a bug such that it
@@ -138,7 +140,7 @@ while true; do
 	break
     fi
 
-    zenity --title "$TITLE" --error --text "$res"
+    zenity $CLS --title "$TITLE" --error --text "$res"
 done
 
 if [ $mounted -eq 0 ]; then
