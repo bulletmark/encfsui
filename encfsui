@@ -37,6 +37,12 @@ TITLE="Mount encfs directory"
 
 CLS="--class EncFSUI"
 
+# Xdg-open (or rather gvfs-open which it calls) has had a bug for nearly
+# 1 year since GNOME 3.14 (now also on 3.16) where it does not work when
+# nautilus is not previously running. So let's disable it.
+#DIR_OPENER="xdg-open"
+DIR_OPENER="nautilus"
+
 # Process command line options
 MINS=""
 PUBLIC=""
@@ -77,7 +83,7 @@ if mount | grep -q "^encfs on $tgt "; then
     fi
 
     # Unmount it
-    res=$(fusermount -u $tgt 2>&1)
+    res=$(fusermount -u "$tgt" 2>&1)
 
     # Output an error if the unmount failed
     if [ $? -ne 0 ]; then
@@ -86,22 +92,28 @@ if mount | grep -q "^encfs on $tgt "; then
     fi
 
     # Remove target dir if it is empty
-    rmdir $tgt &>/dev/null
+    rmdir "$tgt" &>/dev/null
     exit 0
 fi
 
+open-dir-gui() {
+    local dir="$1"
+    $DIR_OPENER $dir &>/dev/null &
+}
+
 # Mount the directory. Check first that this is an encfs filesystem
-if ! encfsctl $src &>/dev/null; then
+if ! encfsctl "$src" &>/dev/null; then
 
     # Open terminal and run encfs to prompt user through creation
     if ! xterm -fa monospace -fs 10 -T "$TITLE" \
-	-e "encfs $PUBLIC $MINS $src $tgt" &>/dev/null; then
+	-e "encfs $PUBLIC $MINS \"$src\" \"$tgt\"" &>/dev/null; then
 	zenity $CLS --title "$TITLE" --error --text \
 	"$src is not an encfs filesystem.\n\nCreate it manually with encfs."
 	exit 1
     fi
 
     if [ $NOOPEN -eq 0 ]; then
+	open-dir-gui "$tgt"
 	xdg-open $tgt &>/dev/null
     fi
 
@@ -109,7 +121,7 @@ if ! encfsctl $src &>/dev/null; then
 fi
 
 # Create target dir if it doesn't exist
-mkdir -p $tgt &>/dev/null
+mkdir -p "$tgt" &>/dev/null
 
 # Loop on user entry for passphrase ..
 mounted=0
@@ -128,12 +140,12 @@ while true; do
     fi
 
     # Give passphrase to encfs and mount the file system
-    res=$(echo "$res" | encfs -S $PUBLIC $MINS $src $tgt 2>&1)
+    res=$(echo "$res" | encfs -S $PUBLIC $MINS "$src" "$tgt" 2>&1)
 
     # Check for error (typically a bad passphrase)
     if [ $? -eq 0 ]; then
 	if [ $NOOPEN -eq 0 ]; then
-	    xdg-open $tgt &>/dev/null
+	    open-dir-gui "$tgt"
 	fi
 
 	mounted=1
@@ -144,7 +156,7 @@ while true; do
 done
 
 if [ $mounted -eq 0 ]; then
-    rmdir $tgt &>/dev/null
+    rmdir "$tgt" &>/dev/null
 fi
 
 exit 0
