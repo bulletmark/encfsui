@@ -37,11 +37,7 @@ TITLE="Mount encfs directory"
 
 CLS="--class EncFSUI"
 
-# Xdg-open (or rather gvfs-open which it calls) has had a bug for nearly
-# 1 year since GNOME 3.14 (now also on 3.16) where it does not work when
-# nautilus is not previously running. So let's disable it.
-#DIR_OPENER="xdg-open"
-DIR_OPENER="nautilus"
+DIR_OPENER="xdg-open"
 
 # Process command line options
 MINS=""
