@@ -17,13 +17,13 @@ DOC = README.md
 DOCOUT = $(DOC:.md=.html)
 
 all:
-	@echo "Type make install or uninstall"
+	@echo "Type sudo make install|uninstall"
 
 install:
-	@./install.sh
+	@./encfsui-setup -d "$(DESTDIR)" install
 
 uninstall:
-	@./install.sh -r
+	@./encfsui-setup -d "$(DESTDIR)" uninstall
 
 doc:	$(DOCOUT)
 

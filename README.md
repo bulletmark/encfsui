@@ -21,48 +21,35 @@ click access to a single encrypted personal directory. I do not want my
 passphrase cached anywhere, and I want an single click way to close off
 access.
 
-A sample desktop launcher file (`encfsui.desktop`) is included.
-
-Home: <http://github.com/bulletmark/encfsui>  
+Home: <http://github.com/bulletmark/encfsui> 
 Author: Mark Blakeney, <markb@berlios.de>
-
-### PREREQUISITES
-
-Requires bash + encfs + zenity + xdg-open. For ubuntu, xdg-open is part
-of xdg-utils and is installed by default. E.g. for ubuntu, you can
-install [encfs](http://www.arg0.net/encfs) and
-[zenity](http://live.gnome.org/Zenity) with the following command:
-
-    sudo apt-get install encfs zenity
-
-*Note zenity seems installed by default now in Ubuntu 12.04.*
 
 ### INSTALLATION
 
-Unpack this archive, or git pull a copy of the sources.
+NOTE: Arch users can just install [_encfsui from the
+AUR_](https://aur.archlinux.org/packages/encfsui/) and skip to the next
+section. Other users can install the following:
 
-To install for your own personal use, type:
-
-    make install
-
-which copies encfsui to `$HOME/bin/` and encfsui.desktop to
-`$HOME/.local/share/applications/`.
-
-Alternately, to install in a system area for all users type:
-
+    # Install encfs zenity xdg-utils
+    git clone http://github.com/bulletmark/arch-upgrade
+    cd arch-upgrade
     sudo make install
 
-which copies encfsui to `/usr/bin/` and encfsui.desktop to
-`/usr/share/applications/`.
-
-On Ubuntu Unity or Gnome Shell, you can search for encfsui in your
-applications list to start it, or drag add it to your Unity or Gnome
-Shell launcher for convenience. Of course you can create multiple encfs
-source + target directories, each with corresponding desktop
-launchers, if you want to specify their commands with different source
-and target dirs in the command line as described next.
-
 ### USAGE
+
+The installation procedure creates a desktop application _encfsui_ which
+you can run from your DE. By default, _encfsui_ mounts your encrypted
+`~/.Private` dir to unencrypted `~/Private` with an in-activity timeout
+of 60 minutes. So you should first create an 
+[encfs](http://www.arg0.net/encfs) `~/.Private` directory.
+See `man encfs` for details on how to do this.
+
+You can also copy the
+`/usr/share/applications/encfsui.desktop` launcher to your own Desktop
+Launcher in `~/.local/share/applications/` (with a custom name) to
+use different directory names or timeout etc.
+
+The utility can also be run from the command line. The usage is:
 
     encfsui [-options] source_enc_dir target_mount_dir
 
@@ -73,6 +60,16 @@ and target dirs in the command line as described next.
     -i <mins> specify idle timeout mins
     -p (make public mount, can only be done by root)
     -o (don't open target dir in gui mode)
+
+### CLEANUP OF OLD CONFIGURATION
+
+Note that _encfsui_ now installs system-wide but old versions installed
+as local user files so to ensure that any old user configuration is
+removed type the following as your normal user (i.e. not sudo/root).
+
+    encfsui-setup clean
+
+You can type this any time so no harm is done running it to make sure.
 
 ### LICENSE
 

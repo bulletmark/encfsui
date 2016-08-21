@@ -104,7 +104,7 @@ if ! encfsctl "$src" &>/dev/null; then
     if ! xterm -fa monospace -fs 10 -T "$TITLE" \
 	-e "encfs $PUBLIC $MINS \"$src\" \"$tgt\"" &>/dev/null; then
 	zenity $CLS --title "$TITLE" --error --text \
-	"$src is not an encfs filesystem.\n\nCreate it manually with encfs."
+	"$src does not exist or is not an encfs filesystem.\n\nCreate it manually with encfs."
 	exit 1
     fi
 
