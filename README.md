@@ -1,6 +1,7 @@
 ## ENCRYPTED FILESYSTEM [ENCFS](http://www.arg0.net/encfs) GUI WRAPPER
 
-This bash script provides a simple gui around the
+[Encfsui](https://github.com/bulletmark/encfsui) is a bash script which
+provides a simple gui around the
 [encfs](http://www.arg0.net/encfs) command line utility to mount
 and unmount an encrypted directory. This script requires
 [encfs](http://www.arg0.net/encfs),
@@ -21,8 +22,8 @@ click access to a single encrypted personal directory. I do not want my
 passphrase cached anywhere, and I want an single click way to close off
 access.
 
-Home: <http://github.com/bulletmark/encfsui> 
-Author: Mark Blakeney, <markb@berlios.de>
+The latest version and documentation is available at
+http://github.com/bulletmark/encfsui.
 
 ### INSTALLATION
 
