@@ -22,6 +22,8 @@ click access to a single encrypted personal directory. I do not want my
 passphrase cached anywhere, and I want an single click way to close off
 access.
 
+See example screenshots at https://github.com/bulletmark/encfsui/wiki.
+
 The latest version and documentation is available at
 http://github.com/bulletmark/encfsui.
 
