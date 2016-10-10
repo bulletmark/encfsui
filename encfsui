@@ -54,6 +54,10 @@ done
 
 shift $((OPTIND - 1))
 
+if [ $# -ne 2 ]; then
+    usage
+fi
+
 # Read source and target dirs. Make absolute path.
 src=$(readlink -f $1)
 tgt=$(readlink -f $2)
@@ -99,21 +103,9 @@ open-dir-gui() {
 
 # Mount the directory. Check first that this is an encfs filesystem
 if ! encfsctl "$src" &>/dev/null; then
-
-    # Open terminal and run encfs to prompt user through creation
-    if ! xterm -fa monospace -fs 10 -T "$TITLE" \
-	-e "encfs $PUBLIC $MINS \"$src\" \"$tgt\"" &>/dev/null; then
-	zenity $CLS --title "$TITLE" --error --text \
-	"$src does not exist or is not an encfs filesystem.\n\nCreate it manually with encfs."
-	exit 1
-    fi
-
-    if [ $NOOPEN -eq 0 ]; then
-	open-dir-gui "$tgt"
-	xdg-open $tgt &>/dev/null
-    fi
-
-    exit 0
+    zenity $CLS --title "$TITLE" --error --text \
+    "$src does not exist or is not an encfs filesystem.\nCreate it manually with encfs. E.g. Run the following and answer the prompts.\n\nencfs ~/.Private ~/Private\n\nSee man encfs for more options and details."
+    exit 1
 fi
 
 # Create target dir if it doesn't exist
