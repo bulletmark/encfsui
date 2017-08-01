@@ -6,18 +6,18 @@
 #
 # Return code = 0 if no error, else 1.
 #
-# Copyright (C) 2010 Mark Blakeney, markb@berlios.de. This program is
-# distributed under the terms of the GNU General Public License. This
-# program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by the
-# Free Software Foundation, either version 3 of the License, or any
-# later version. This program is distributed in the hope that it will be
-# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# Copyright (C) 2010 Mark Blakeney. This program is distributed under
+# the terms of the GNU General Public License. This program is free
+# software: you can redistribute it and/or modify it under the terms of
+# the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or any later version.
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # General Public License at <http://www.gnu.org/licenses/> for more
 # details.
 #
-# Mark Blakeney, markb@berlios.de, Oct 2010.
+# Mark Blakeney, Oct 2010.
 # http://github.com/bulletmark/encfsui>
 ###############################################################################
 
@@ -37,7 +37,8 @@ TITLE="Mount encfs directory"
 
 CLS="--class EncFSUI"
 
-DIR_OPENER="xdg-open"
+#DIR_OPENER="xdg-open"
+DIR_OPENER="nautilus"
 
 # Process command line options
 MINS=""
