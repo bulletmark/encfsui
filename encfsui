@@ -37,9 +37,6 @@ TITLE="Mount encfs directory"
 
 CLS="--class EncFSUI"
 
-#DIR_OPENER="xdg-open"
-DIR_OPENER="nautilus"
-
 # Process command line options
 MINS=""
 PUBLIC=""
@@ -99,7 +96,13 @@ fi
 
 open-dir-gui() {
     local dir="$1"
-    $DIR_OPENER $dir &>/dev/null &
+
+    # Temporary hack to run opener twice to work around GNOME bug
+    # https://bugzilla.gnome.org/show_bug.cgi?id=780296 until it is
+    # fixed.
+    xdg-open $dir &>/dev/null &
+    sleep 1
+    xdg-open $dir &>/dev/null &
 }
 
 # Mount the directory. Check first that this is an encfs filesystem
