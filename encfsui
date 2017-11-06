@@ -96,12 +96,6 @@ fi
 
 open-dir-gui() {
     local dir="$1"
-
-    # Temporary hack to run opener twice to work around GNOME bug
-    # https://bugzilla.gnome.org/show_bug.cgi?id=780296 until it is
-    # fixed.
-    xdg-open $dir &>/dev/null &
-    sleep 1
     xdg-open $dir &>/dev/null &
 }
 
