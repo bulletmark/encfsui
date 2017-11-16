@@ -32,11 +32,6 @@ usage() {
     exit 1
 }
 
-# Title on all zenity gui prompts
-TITLE="Mount encfs directory"
-
-CLS="--class EncFSUI"
-
 # Process command line options
 MINS=""
 PUBLIC=""
@@ -65,8 +60,25 @@ if [ -z "$src" -o -z "$tgt"  ]; then
     usage
 fi
 
+# Function to output message using graphical prompt
+gui() {
+    local title="$1"
+    local type="$2"
+    local text="$3"
+
+    if [ $type == "entry" ]; then
+	args="--hide-text"
+    else
+	args="--ellipsize --"
+    fi
+
+    # Send errors to null to avoid spurious GTK warnings.
+    zenity --$type --title="$title encfs directory" \
+	--text="$text" --class=EncFSUI $args 2>/dev/null
+}
+
 if ! type encfs &>/dev/null; then
-    zenity $CLS --title "$TITLE" --error --text \
+    gui Mount error \
     "Sorry, encfs is not installed.\n\nInstall it via your package manager."
     exit 1
 fi
@@ -75,7 +87,7 @@ fi
 if mount | grep -q "^encfs on $tgt "; then
 
     # Prompt to unmount
-    if ! zenity $CLS --title "$TITLE" --question --text \
+    if ! gui Mount question \
 	"$tgt is already mounted.\n\nDo you want to unmount it?"; then
 	exit 0
     fi
@@ -85,7 +97,7 @@ if mount | grep -q "^encfs on $tgt "; then
 
     # Output an error if the unmount failed
     if [ $? -ne 0 ]; then
-	zenity $CLS --title "Unmount encfs directory" --error --text "$res"
+	gui Unmount error "$res"
 	exit 1
     fi
 
@@ -101,7 +113,7 @@ open-dir-gui() {
 
 # Mount the directory. Check first that this is an encfs filesystem
 if ! encfsctl "$src" &>/dev/null; then
-    zenity $CLS --title "$TITLE" --error --text \
+    gui Mount error \
     "$src does not exist or is not an encfs filesystem.\nCreate it manually with encfs. E.g. Run the following and answer the prompts.\n\nencfs ~/.Private ~/Private\n\nSee man encfs for more options and details."
     exit 1
 fi
@@ -114,8 +126,7 @@ mounted=0
 while true; do
 
     # Get passphrase from user
-    res=$(zenity $CLS --title "$TITLE" --entry \
-	--text "Mount $src to $tgt\n\nWhat is the passphrase?" --hide-text)
+    res=$(gui Mount entry "Mount $src to $tgt\n\nWhat is the passphrase?")
 
     # User may cancel. Note that encfs has a bug such that it
     # does not intercept this case if you use the --extpass
@@ -138,7 +149,7 @@ while true; do
 	break
     fi
 
-    zenity $CLS --title "$TITLE" --error --text "$res"
+    gui Mount error "$res"
 done
 
 if [ $mounted -eq 0 ]; then
