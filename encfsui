@@ -22,7 +22,7 @@
 ###############################################################################
 
 usage() {
-    echo "Usage: `basename $0` [-options] source_enc_dir target_mount_dir"
+    echo "Usage: $(basename $0) [-options] source_enc_dir target_mount_dir"
     echo "GUI utility to mount source_enc_dir to target_mount_dir."
     echo "If target already mounted then it will be unmounted instead."
     echo "Options:"
