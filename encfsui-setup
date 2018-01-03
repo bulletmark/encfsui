@@ -50,6 +50,11 @@ if [ $cmd = "install" -o $cmd = "uninstall" ]; then
 	install -CDv -m 644 -t $DESTDIR$APPDIR $NAME.desktop
 	install -CDv -m 644 -t $DESTDIR$ICODIR $NAME.png
 	install -CDv -m 644 -t $DESTDIR$DOCDIR README.md
+
+	# Also install HTML file if markdown is available
+	if hash markdown &>/dev/null; then
+	    markdown README.md -o $DESTDIR$DOCDIR/README.html
+	fi
     else
 	rm -rfv $DESTDIR$BINDIR/$NAME
 	rm -rfv $DESTDIR$APPDIR/$NAME.desktop
