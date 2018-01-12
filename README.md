@@ -34,9 +34,9 @@ AUR_](https://aur.archlinux.org/packages/encfsui/) and skip to the next
 section. Other users can install the following:
 
     # Install encfs zenity xdg-utils
-    git clone http://github.com/bulletmark/arch-upgrade
-    cd arch-upgrade
-    sudo make install
+    git clone http://github.com/bulletmark/encfsui
+    cd encfsui
+    sudo make install (or sudo ./encfsui-setup install)
 
 ### USAGE
 
@@ -73,6 +73,12 @@ removed type the following as your normal user (i.e. not sudo/root).
     encfsui-setup clean
 
 You can type this any time so no harm is done running it to make sure.
+
+### UPGRADE
+
+    cd encfsui  # Source dir, as above
+    git pull
+    sudo make install (or sudo ./encfsui-setup install)
 
 ### LICENSE
 
