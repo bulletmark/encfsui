@@ -31,20 +31,20 @@ done
 
 shift $((OPTIND - 1))
 
-if [ $# -ne 1 ]; then
+if [[ $# -ne 1 ]]; then
     usage
 fi
 
 cmd="$1"
 
-if [ $cmd = "install" -o $cmd = "uninstall" ]; then
-    DESTDIR=$(echo "$DESTDIR" | sed 's:/*$::')
-    if [ -z "$DESTDIR" -a "$(id -un)" != "root" ]; then
+if [[ $cmd == install || $cmd == uninstall ]]; then
+    DESTDIR="${DESTDIR%%+(/)}"
+    if [[ -z $DESTDIR && $(id -un) != root ]]; then
 	echo "Install or uninstall must be run as sudo/root."
 	exit 1
     fi
 
-    if [ $cmd = "install" ]; then
+    if [[ $cmd == install ]]; then
 	install -CDv -m 755 -t $DESTDIR$BINDIR $NAME-setup
 	install -CDv -m 755 -t $DESTDIR$BINDIR $NAME
 	install -CDv -m 644 -t $DESTDIR$APPDIR $NAME.desktop
@@ -63,16 +63,16 @@ if [ $cmd = "install" -o $cmd = "uninstall" ]; then
 	rm -rfv $DESTDIR$BINDIR/$NAME-setup
     fi
 
-    if [ -z "$DESTDIR" ]; then
-	if [ -x /usr/bin/gtk-update-icon-cache ]; then
+    if [[ -z $DESTDIR ]]; then
+	if [[ -x /usr/bin/gtk-update-icon-cache ]]; then
 	    /usr/bin/gtk-update-icon-cache $ICOBAS
 	fi
-	if [ -x /usr/bin/update-desktop-database ]; then
+	if [[ -x /usr/bin/update-desktop-database ]]; then
 	    /usr/bin/update-desktop-database -q
 	fi
     fi
-elif [ $cmd = "clean" ]; then
-    if [ "$(id -un)" = "root" ]; then
+elif [[ $cmd == clean ]]; then
+    if [[ $(id -un) == root ]]; then
 	echo "This command must be run as your own user."
 	exit 1
     fi
