@@ -97,8 +97,20 @@ if mount | grep -q "^encfs on $tgt "; then
 
     # Output an error if the unmount failed
     if [[ $? -ne 0 ]]; then
-	gui Unmount error "$res"
-	exit 1
+		# Prompt to unmount
+	    if ! gui Mount question \
+			"$res\n\nDo you want to force unmount?"; then
+			exit 1
+	    fi
+
+		# force unmount it
+		res=$(fusermount -uz "$tgt" 2>&1)
+		
+		# Output an error if the unmount failed
+    	if [[ $? -ne 0 ]]; then
+			gui Unmount error "$res"
+			exit 1
+		fi
     fi
 
     # Remove target dir if it is empty
@@ -118,8 +130,6 @@ if ! encfsctl "$src" &>/dev/null; then
     exit 1
 fi
 
-# Create target dir if it doesn't exist
-mkdir -p "$tgt" &>/dev/null
 
 # Loop on user entry for passphrase ..
 mounted=0
@@ -135,6 +145,9 @@ while true; do
     if [[ $? -ne 0 ]]; then
 	break
     fi
+
+	# Create target dir if it doesn't exist
+	mkdir -p "$tgt" &>/dev/null
 
     # Give passphrase to encfs and mount the file system
     res=$(echo "$res" | encfs -S $PUBLIC $MINS "$src" "$tgt" 2>&1)
