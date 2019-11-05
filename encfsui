@@ -144,10 +144,11 @@ fi
 
 # Loop on user entry for passphrase ..
 mounted=0
+TMP_tgt="$tgt.encfsui-tmp"
 while true; do
 
     # Get passphrase from user
-    res=$(gui Mount entry "Mount $src to $tgt\n\nWhat is the passphrase?")
+    passphrase=$(gui Mount entry "Mount $src to $tgt\n\nWhat is the passphrase?")
 
     # User may cancel. Note that encfs has a bug such that it
     # does not intercept this case if you use the --extpass
@@ -158,22 +159,28 @@ while true; do
     fi
 
     # Create target dir if it doesn't exist
-    mkdir -p "$tgt" &>/dev/null
+    mkdir -p "$TMP_tgt" &>/dev/null
 
-    # Give passphrase to encfs and mount the file system
-    res=$(echo "$res" | encfs -S $PUBLIC $MINS "$src" "$tgt" 2>&1)
+    # Give passphrase to encfs and mount the tmp file system
+    res=$(echo "$passphrase" | encfs -S "$src" "$TMP_tgt" 2>&1)
 
     # Check for error (typically a bad passphrase)
     if [[ $? -eq 0 ]]; then
+
+        mkdir -p "$tgt" &>/dev/null
+        echo "$passphrase" | encfs -S $PUBLIC $MINS "$src" "$tgt"
         if [[ $NOOPEN -eq 0 ]]; then
             open-dir-gui "$tgt"
         fi
 
         mounted=1
+        #remove the tmp file system
+        fusermount -u "$TMP_tgt" &&
+        rmdir "$TMP_tgt"
         break
     fi
 
-    rmdir "$tgt"
+    rmdir "$TMP_tgt"
     gui Mount error "$res"
 done
 
