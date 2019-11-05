@@ -97,20 +97,31 @@ if mount | grep -q "^encfs on $tgt "; then
 
     # Output an error if the unmount failed
     if [[ $? -ne 0 ]]; then
+
+        # Special case for nextcloud client sync
+        if [[ ! $(ls "$tgt/._sync_"*) || ! $(pgrep nextcloud) ]]; then
+            exit 1;
+        fi
         # Prompt to unmount
         if ! gui Mount question \
-        "$res\n\nDo you want to force unmount?"; then
+        "$res\n\n$tgt is synchronized with Nextcloud client. Do you want to restart nextcloud in order to unmount it?"; then
             exit 1
         fi
 
-        # force unmount it
-        res=$(fusermount -uz "$tgt" 2>&1)
+        # kill nextcloud and unmount it
+        while pkill nextcloud ; do
+            sleep 0.1
+        done
+
+        res=$(fusermount -u "$tgt" 2>&1)
 
         # Output an error if the unmount failed
         if [[ $? -ne 0 ]]; then
             gui Unmount error "$res"
             exit 1
         fi
+
+        nextcloud &
     fi
 
     # Remove target dir if it is empty
@@ -162,6 +173,7 @@ while true; do
         break
     fi
 
+    rmdir "$tgt"
     gui Mount error "$res"
 done
 
