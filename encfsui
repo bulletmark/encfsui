@@ -163,14 +163,27 @@ while true; do
 
     # Give passphrase to encfs and mount the tmp file system
     res=$(echo "$passphrase" | encfs -S "$src" "$TMP_tgt" 2>&1)
-
     # Check for error (typically a bad passphrase)
     if [[ $? -eq 0 ]]; then
+        if [[ $(pgrep nextcloud) ]] && gui Mount question "A Nextcloud client is running.\nIf your encrypted folder is synchronized with your Nextcloud server,\nthe client might start synchronizing the empty folder before encfs complete the decryption.\nDo you want to stop nextcloud during the operation?"; then
+            stopNextcloud=TRUE
+        fi
 
+        # kill nextcloud and unmount it
+        if [ -n "$stopNextcloud" ]; then
+            while pkill nextcloud ; do
+                sleep 0.1
+            done
+        fi
+        # mount folder
         mkdir -p "$tgt" &>/dev/null
         echo "$passphrase" | encfs -S $PUBLIC $MINS "$src" "$tgt"
         if [[ $NOOPEN -eq 0 ]]; then
             open-dir-gui "$tgt"
+        fi
+
+        if [ -n "$stopNextcloud" ]; then
+            nextcloud &
         fi
 
         mounted=1
