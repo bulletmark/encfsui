@@ -17,7 +17,7 @@ DOC = README.md
 DOCOUT = $(DOC:.md=.html)
 
 all:
-	@echo "Type sudo make install|uninstall"
+	@echo "Type make install|uninstall|check"
 
 install:
 	@./encfsui-setup -d "$(DESTDIR)" install
@@ -29,6 +29,9 @@ doc:	$(DOCOUT)
 
 $(DOCOUT): $(DOC)
 	markdown $< >$@
+
+check:
+	shellcheck encfsui
 
 clean:
 	rm -rf $(DOCOUT)
