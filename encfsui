@@ -67,9 +67,9 @@ gui() {
     local text="$3"
 
     if [[ $type == entry ]]; then
-        args="--hide-text"
+      args="--hide-text"
     else
-        args="--ellipsize --"
+      args="--ellipsize --"
     fi
 
     # Send errors to null to avoid spurious GTK warnings.
@@ -88,8 +88,8 @@ if mount | grep -q "^encfs on $tgt "; then
 
     # Prompt to unmount
     if ! gui Mount question \
-    "$tgt is already mounted.\n\nDo you want to unmount it?"; then
-        exit 0
+      "$tgt is already mounted.\n\nDo you want to unmount it?"; then
+      exit 0
     fi
 
     # Unmount it
@@ -155,7 +155,7 @@ while true; do
     # option. That's why we are calling zenity and encfs
     # explicity ourselves.
     if [[ $? -ne 0 ]]; then
-        break
+      break
     fi
 
     # Create target dir if it doesn't exist
