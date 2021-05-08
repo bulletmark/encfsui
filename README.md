@@ -1,5 +1,14 @@
 ## ENCRYPTED FILESYSTEM [ENCFS](http://www.arg0.net/encfs) GUI WRAPPER
 
+_**Note: This project is still maintained but has essentially been
+superceded by [gocryptfs-ui](https://github.com/bulletmark/gocryptfs-ui)
+which uses [gocryptfs](https://github.com/rfjakob/gocryptfs) rather than
+[encfs](http://www.arg0.net/encfs) because [encfs development is now
+dormant](https://github.com/vgough/encfs#status). It is recommended that
+users of [encfsui](https://github.com/bulletmark/encfsui)
+migrate to
+[gocryptfs-ui](https://github.com/bulletmark/gocryptfs-ui)**_.
+
 [Encfsui](https://github.com/bulletmark/encfsui) is a bash script which
 provides a simple gui around the
 [encfs](http://www.arg0.net/encfs) command line utility to mount
@@ -15,7 +24,7 @@ directory arguments. The script uses
 and then mounts the [encfs](http://www.arg0.net/encfs) directory. If you
 click on the launcher when the private directory is already mounted,
 then you are prompted to unmount it. There are some other options, see
-usage below.
+the usage below.
 
 My motivation for creating this script was to give simple and quick one
 click access to a single encrypted personal directory. I do not want my
@@ -31,7 +40,7 @@ http://github.com/bulletmark/encfsui.
 
 NOTE: Arch users can just install [_encfsui from the
 AUR_](https://aur.archlinux.org/packages/encfsui/) and skip to the next
-section. Other users can install the following:
+section. Other users can install by running:
 
     # Install encfs zenity xdg-utils
     git clone http://github.com/bulletmark/encfsui

@@ -12,18 +12,18 @@
 # General Public License at <http://www.gnu.org/licenses/> for more
 # details.
 
+NAME = encfsui
 DOC = README.md
-
 DOCOUT = $(DOC:.md=.html)
 
 all:
 	@echo "Type make install|uninstall|check"
 
 install:
-	@./encfsui-setup -d "$(DESTDIR)" install
+	@./$(NAME)-setup -d "$(DESTDIR)" install
 
 uninstall:
-	@./encfsui-setup -d "$(DESTDIR)" uninstall
+	@./$(NAME)-setup -d "$(DESTDIR)" uninstall
 
 doc:	$(DOCOUT)
 
@@ -31,7 +31,7 @@ $(DOCOUT): $(DOC)
 	markdown $< >$@
 
 check:
-	shellcheck encfsui
+	shellcheck $(NAME) $(NAME)-setup
 
 clean:
 	rm -rf $(DOCOUT)
