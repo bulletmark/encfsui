@@ -54,12 +54,13 @@ you can run from your DE. By default, _encfsui_ mounts your encrypted
 `~/.Private` dir to unencrypted `~/Private` with an in-activity timeout
 of 60 minutes. So you should first create an 
 [encfs](http://www.arg0.net/encfs) `~/.Private` directory.
-See `man encfs` for details on how to do this.
+See [`man encfs`](https://linux.die.net/man/1/encfs) for details on how
+to do this.
 
-You can also copy the
-`/usr/share/applications/encfsui.desktop` launcher to your own Desktop
-Launcher in `~/.local/share/applications/` (with a custom name) to
-use different directory names or timeout etc.
+You can also copy the `/usr/share/applications/encfsui.desktop` launcher
+to your own Desktop Launcher in `~/.local/share/applications/` to use
+different source or target directory names, or to change the timeout,
+etc.
 
 The utility can also be run from the command line. The usage is:
 
