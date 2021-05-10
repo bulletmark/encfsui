@@ -84,7 +84,7 @@ if ! type encfs &>/dev/null; then
 fi
 
 # Check if this target is already mounted
-if mount | grep -q "^encfs on $tgt "; then
+if mount | grep -q " on $tgt "; then
 
     # Prompt to unmount
     if ! gui Mount question \
@@ -128,10 +128,7 @@ while true; do
     # Get passphrase from user
     res=$(gui Mount entry "Mount $src to $tgt\n\nWhat is the passphrase?")
 
-    # User may cancel. Note that encfs has a bug such that it
-    # does not intercept this case if you use the --extpass
-    # option. That's why we are calling zenity and encfs
-    # explicity ourselves.
+    # User may cancel.
     if [[ $? -ne 0 ]]; then
 	break
     fi
