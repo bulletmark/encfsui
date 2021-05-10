@@ -121,22 +121,22 @@ fi
 # Create target dir if it doesn't exist
 mkdir -p "$tgt" &>/dev/null
 
-# Loop on user entry for passphrase ..
+# Loop on user entry for password ..
 mounted=0
 while true; do
 
-    # Get passphrase from user
-    res=$(gui Mount entry "Mount $src to $tgt\n\nWhat is the passphrase?")
+    # Get password from user
+    res=$(gui Mount entry "Mount $src to $tgt\n\nWhat is the password?")
 
     # User may cancel.
     if [[ $? -ne 0 ]]; then
 	break
     fi
 
-    # Give passphrase to encfs and mount the file system
+    # Give password to encfs and mount the file system
     res=$(echo "$res" | encfs -S $PUBLIC $MINS "$src" "$tgt" 2>&1)
 
-    # Check for error (typically a bad passphrase)
+    # Check for error (typically a bad password)
     if [[ $? -eq 0 ]]; then
 	if [[ $NOOPEN -eq 0 ]]; then
 	    open-dir-gui "$tgt"
