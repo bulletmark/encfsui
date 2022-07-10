@@ -1,4 +1,5 @@
 ## ENCRYPTED FILESYSTEM [ENCFS](http://www.arg0.net/encfs) GUI WRAPPER
+[![AUR](https://img.shields.io/aur/version/encfsui)](https://aur.archlinux.org/packages/encfsui/)
 
 _**Note: This project is still maintained but has essentially been
 superceded by [gocryptfs-ui](https://github.com/bulletmark/gocryptfs-ui)
