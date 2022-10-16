@@ -24,8 +24,9 @@ directory arguments. The script uses
 [zenity](http://live.gnome.org/Zenity) to prompt you for the password
 and then mounts the [encfs](http://www.arg0.net/encfs) directory. If you
 click on the launcher when the private directory is already mounted,
-then you are prompted to unmount it. There are some other options, see
-the usage below.
+then you are prompted to unmount it. The prompt windows are [displayed
+in the wiki](https://github.com/bulletmark/encfsui/wiki). There are
+some other options, see the usage below.
 
 My motivation for creating this utility is to provide:
 
@@ -34,9 +35,6 @@ My motivation for creating this utility is to provide:
 2. One mouse click to close the directory.
 3. No background application running.
 4. No password cached anywhere.
-
-
-See example screenshots on the [wiki](https://github.com/bulletmark/encfsui/wiki).
 
 The latest version and documentation is available at
 http://github.com/bulletmark/encfsui.
