@@ -5,4 +5,3 @@ Name=Encfsui
 Exec=/usr/bin/encfsui -i60 .Private Private
 Icon=encfsui
 Categories=Security;Settings;
-StartupWMClass=EncFSUI
