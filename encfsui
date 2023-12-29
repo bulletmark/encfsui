@@ -74,7 +74,7 @@ gui() {
 
     # Send errors to null to avoid spurious GTK warnings.
     zenity --$type --title="$title encfs directory" \
-	--text="$text" $args
+	--text="$text" --modal $args
 }
 
 if ! type encfs &>/dev/null; then
