@@ -16,7 +16,7 @@ provides a simple gui around the
 and unmount an encrypted directory. This script requires
 [encfs][encfs],
 [zenity](http://live.gnome.org/Zenity), and
-[xdg-open](http://portland.freedesktop.org/wiki/).
+[xdg-open](https://linux.die.net/man/1/xdg-open).
 
 Whenever you want to mount your private directory, you click on the
 desktop launcher. The launcher runs the script with appropriate
