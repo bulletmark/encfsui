@@ -1,10 +1,10 @@
-## ENCRYPTED FILESYSTEM [ENCFS](http://www.arg0.net/encfs) GUI WRAPPER
+## ENCRYPTED FILESYSTEM [ENCFS][encfs] GUI WRAPPER
 [![AUR](https://img.shields.io/aur/version/encfsui)](https://aur.archlinux.org/packages/encfsui/)
 
 _**Note: This project is still maintained but has essentially been
 superceded by [gocryptfs-ui](https://github.com/bulletmark/gocryptfs-ui)
 which uses [gocryptfs](https://github.com/rfjakob/gocryptfs) rather than
-[encfs](http://www.arg0.net/encfs) because [encfs development is now
+[encfs][encfs] because [encfs development is now
 dormant](https://github.com/vgough/encfs#status). It is recommended that
 users of [encfsui](https://github.com/bulletmark/encfsui)
 migrate to
@@ -12,9 +12,9 @@ migrate to
 
 [Encfsui](https://github.com/bulletmark/encfsui) is a bash script which
 provides a simple gui around the
-[encfs](http://www.arg0.net/encfs) command line utility to mount
+[encfs][encfs] command line utility to mount
 and unmount an encrypted directory. This script requires
-[encfs](http://www.arg0.net/encfs),
+[encfs][encfs],
 [zenity](http://live.gnome.org/Zenity), and
 [xdg-open](http://portland.freedesktop.org/wiki/).
 
@@ -22,7 +22,7 @@ Whenever you want to mount your private directory, you click on the
 desktop launcher. The launcher runs the script with appropriate
 directory arguments. The script uses
 [zenity](http://live.gnome.org/Zenity) to prompt you for the password
-and then mounts the [encfs](http://www.arg0.net/encfs) directory. If you
+and then mounts the [encfs][encfs] directory. If you
 click on the launcher when the private directory is already mounted,
 then you are prompted to unmount it. The prompt windows are [displayed
 in the wiki](https://github.com/bulletmark/encfsui/wiki). There are
@@ -56,7 +56,7 @@ The installation procedure creates a desktop application _encfsui_ which
 you can run from your DE. By default, _encfsui_ mounts your encrypted
 `~/.Private` dir to unencrypted `~/Private` with an in-activity timeout
 of 60 minutes. So you should first create an
-[encfs](http://www.arg0.net/encfs) `~/.Private` directory, or create a
+[encfs][encfs] `~/.Private` directory, or create a
 link to there from where you keep your encrypted directory. See [`man
 encfs`](https://linux.die.net/man/1/encfs) for details on how to create
 a new encrypted directory.
@@ -108,5 +108,7 @@ This program is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
 Public License at <http://www.gnu.org/licenses/> for more details.
+
+[encfs]: https://en.wikipedia.org/wiki/EncFS
 
 <!-- vim: se ai syn=markdown: -->
